@@ -12,6 +12,7 @@ Fellowdock is a Discord-inspired platform where each community can operate an in
 
 - **Independent servers:** No mandatory central Fellowdock service.
 - **Multi-server client:** Connect to and switch between multiple servers from one application.
+- **Two initial clients:** Web/PWA and Ubuntu desktop, with one shared React interface.
 - **Self-hosting first:** Docker Compose deployment with clear documentation.
 - **Open protocol:** Versioned API and WebSocket event schemas.
 - **Secure by default:** TLS for remote connections, password hashing, permissions, rate limiting, sensible upload limits and no hard-coded secrets.
@@ -19,8 +20,9 @@ Fellowdock is a Discord-inspired platform where each community can operate an in
 
 ## Proposed stack
 
-- Frontend: React, TypeScript, Vite, installable PWA (web-first)
-- Desktop: Deferred; no native desktop app in initial releases
+- Frontend: React, TypeScript, Vite, installable PWA
+- Ubuntu desktop: Tauri 2 using the shared React frontend (native application, not just a browser shortcut)
+- Initial supported clients: Web/PWA and Ubuntu desktop (Linux .deb and AppImage packages)
 - Backend: Node.js, TypeScript, Fastify, WebSocket
 - Database: PostgreSQL
 - Voice/video (later): WebRTC with a self-hostable SFU such as LiveKit
@@ -45,8 +47,12 @@ These are architectural starting choices, not final commitments.
 - Roles and permission enforcement
 - Attachments with file type/size restrictions
 
-### Phase 3: Web client polish and release pipeline
+### Phase 3: Ubuntu desktop, client polish and release pipeline
 - Installable PWA and cross-browser/mobile testing
+- Tauri 2 desktop application for Ubuntu, sharing UI and protocol packages with the web client
+- Produce Ubuntu .deb and AppImage release assets in GitHub Actions
+- Secure desktop session storage through OS keyring or equivalent secure credential storage
+- Signed desktop auto-update manifests and verified installer downloads; opt-in or channel-configurable updates
 - Notifications, unread counts, search, profiles and settings
 - Multi-server session storage, reconnect behavior and accessibility
 
@@ -60,7 +66,7 @@ These are architectural starting choices, not final commitments.
 ```text
 apps/
   web/        # Browser client
-  desktop/    # Optional future Tauri wrapper
+  desktop/    # Tauri 2 Ubuntu desktop client (shared React UI)
   server/     # Self-hosted backend
 packages/
   protocol/   # Versioned schemas and shared types
@@ -87,6 +93,7 @@ The initial codebase is being designed. Contribution guidelines and a license wi
 
 - GitHub Actions will build tested, multi-architecture OCI images and publish versioned releases to GHCR.
 - Web clients will fetch new immutable assets on refresh; a service worker can show an update-ready banner and request user refresh when needed.
+- Ubuntu Tauri app releases will include signed update artifacts and a configured update endpoint; the in-app updater will check for and install verified updates. A .deb installed via a system package manager is subject to its package-manager update behavior.
 - Ubuntu deployments will support *opt-in* automatic updates with image pinning, health checks, pre-migration backups, monitoring and documented rollback. Do not auto-apply untested major versions or blindly use `latest`.
 - Umbrel app-store installations will follow Umbrel's official update flow: Umbrel does **not** automatically install app updates. A separately managed Docker stack may optionally auto-update but must not be advertised as native Umbrel app-store behavior.
 - PostgreSQL data remains in durable volumes. Backups and forward-compatible database migrations are required before unattended upgrades are enabled.
