@@ -12,7 +12,7 @@ Fellowdock is a Discord-inspired platform where each community can operate an in
 
 - **Independent servers:** No mandatory central Fellowdock service.
 - **Multi-server client:** Connect to and switch between multiple servers from one application.
-- **Two initial clients:** Web/PWA and Ubuntu desktop, with one shared React interface.
+- **Cross-platform by design:** Web/PWA and Ubuntu desktop first; Windows and macOS desktop releases later from the same frontend and Tauri app.
 - **Self-hosting first:** Docker Compose deployment with clear documentation.
 - **Open protocol:** Versioned API and WebSocket event schemas.
 - **Secure by default:** TLS for remote connections, password hashing, permissions, rate limiting, sensible upload limits and no hard-coded secrets.
@@ -21,8 +21,9 @@ Fellowdock is a Discord-inspired platform where each community can operate an in
 ## Proposed stack
 
 - Frontend: React, TypeScript, Vite, installable PWA
-- Ubuntu desktop: Tauri 2 using the shared React frontend (native application, not just a browser shortcut)
+- Desktop: Tauri 2 using the shared React frontend, targeting Ubuntu first with planned Windows and macOS support
 - Initial supported clients: Web/PWA and Ubuntu desktop (Linux .deb and AppImage packages)
+- Future clients: Windows (.msi/.exe) and macOS (.dmg), based on the same UI, API and desktop shell architecture
 - Backend: Node.js, TypeScript, Fastify, WebSocket
 - Database: PostgreSQL
 - Voice/video (later): WebRTC with a self-hostable SFU such as LiveKit
@@ -56,6 +57,13 @@ These are architectural starting choices, not final commitments.
 - Notifications, unread counts, search, profiles and settings
 - Multi-server session storage, reconnect behavior and accessibility
 
+### Future platform expansion
+- CI builds and tests on Ubuntu, Windows and macOS runners when those targets are introduced
+- Windows installers, code signing and update distribution
+- macOS universal or architecture-specific builds, signing and notarization
+- Platform adapters for notifications, secure credential storage, deep links, tray icons and media permissions
+- Keep server APIs platform-neutral and avoid Linux-specific client dependencies
+
 ### Phase 4: Voice and community features
 - Voice channels and optional video/screen sharing
 - Invite links, moderation tools, backups and administrative controls
@@ -66,7 +74,7 @@ These are architectural starting choices, not final commitments.
 ```text
 apps/
   web/        # Browser client
-  desktop/    # Tauri 2 Ubuntu desktop client (shared React UI)
+  desktop/    # Cross-platform Tauri 2 client (Ubuntu first; Windows/macOS later)
   server/     # Self-hosted backend
 packages/
   protocol/   # Versioned schemas and shared types
