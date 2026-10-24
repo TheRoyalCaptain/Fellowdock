@@ -19,12 +19,12 @@ Fellowdock is a Discord-inspired platform where each community can operate an in
 
 ## Proposed stack
 
-- Frontend: React, TypeScript, Vite
-- Desktop: Tauri (Windows, macOS, Linux)
+- Frontend: React, TypeScript, Vite, installable PWA (web-first)
+- Desktop: Deferred; no native desktop app in initial releases
 - Backend: Node.js, TypeScript, Fastify, WebSocket
 - Database: PostgreSQL
 - Voice/video (later): WebRTC with a self-hostable SFU such as LiveKit
-- Deployment: Docker Compose
+- Deployment: Ubuntu Server via Docker Compose; Umbrel via packaged app using the same images
 - Automation: GitHub Actions
 
 These are architectural starting choices, not final commitments.
@@ -45,8 +45,8 @@ These are architectural starting choices, not final commitments.
 - Roles and permission enforcement
 - Attachments with file type/size restrictions
 
-### Phase 3: Desktop and polish
-- Tauri desktop builds
+### Phase 3: Web client polish and release pipeline
+- Installable PWA and cross-browser/mobile testing
 - Notifications, unread counts, search, profiles and settings
 - Multi-server session storage, reconnect behavior and accessibility
 
@@ -60,13 +60,14 @@ These are architectural starting choices, not final commitments.
 ```text
 apps/
   web/        # Browser client
-  desktop/    # Tauri desktop wrapper
+  desktop/    # Optional future Tauri wrapper
   server/     # Self-hosted backend
 packages/
   protocol/   # Versioned schemas and shared types
   ui/         # Reusable client components
 deploy/
-  docker/     # Self-hosting manifests
+  docker/     # Ubuntu self-hosting manifests
+  umbrel/     # Umbrel app packaging
 docs/         # Architecture, setup and security
 .github/
   workflows/  # CI and release workflows
@@ -81,3 +82,11 @@ Do not expose an unprotected server to the public internet during early developm
 ## Contributing
 
 The initial codebase is being designed. Contribution guidelines and a license will be added before public releases.
+
+## Releases and automatic updates
+
+- GitHub Actions will build tested, multi-architecture OCI images and publish versioned releases to GHCR.
+- Web clients will fetch new immutable assets on refresh; a service worker can show an update-ready banner and request user refresh when needed.
+- Ubuntu deployments will support *opt-in* automatic updates with image pinning, health checks, pre-migration backups, monitoring and documented rollback. Do not auto-apply untested major versions or blindly use `latest`.
+- Umbrel app-store installations will follow Umbrel's official update flow: Umbrel does **not** automatically install app updates. A separately managed Docker stack may optionally auto-update but must not be advertised as native Umbrel app-store behavior.
+- PostgreSQL data remains in durable volumes. Backups and forward-compatible database migrations are required before unattended upgrades are enabled.
