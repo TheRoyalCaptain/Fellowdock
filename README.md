@@ -6,7 +6,15 @@ An open-source, self-hosted communication platform with a multi-server client.
 
 ## Vision
 
-Fellowdock is a Discord-inspired platform where each community can operate an independent server. A single client can connect to multiple server URLs and keep them organized in one interface. Server owners retain control of their own accounts, communities and data.
+Fellowdock is an independent community communication platform where each community can operate an independent server. A single client can connect to multiple server URLs and keep them organized in one interface. Server owners retain control of their own accounts, communities and data.
+
+## Product identity and user experience
+
+- Always present the product solely as **Fellowdock** in the interface, marketing copy, source documentation, packages and release descriptions.
+- Do not refer to, display, or embed other communication platforms' names, logos, icons, illustrations, trademarks or branded assets in the product.
+- Aim for a familiar full-featured community chat experience: vertical server switcher, channel navigation, central chat timeline, member list, voice rooms, presence, roles, DMs, notifications, attachments, calls and moderation controls.
+- Use an original Fellowdock visual identity, assets, typography and interaction details, not a pixel-for-pixel copy of another application's protected visuals.
+- Design features incrementally; voice/video, screen sharing and advanced moderation are planned and not yet implemented.
 
 ## Initial principles
 
